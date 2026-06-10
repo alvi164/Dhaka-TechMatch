@@ -44,35 +44,36 @@ with col2:
     )
 
 # 4. Processing & Execution Engine
-if st.button("🚀 Analyze Skill Gap & Generate 3-Month Roadmap"):
+if st.button("🚀 Analyze Skill Gap & Fetch Matching Jobs"):
     if not client:
         st.error("Please supply a valid OpenAI API Key first.")
     elif not target_role or not resume_text:
         st.warning("Please provide both your target job title and your current resume text.")
     else:
-        with st.spinner("Analyzing current Dhaka tech market trends and benchmarking your resume..."):
+        with st.spinner("Scanning local market data (Bdjobs/LinkedIn context) and mapping job openings..."):
             try:
-                # Prompt constructed to explicitly handle localized market context
+                # Upgraded prompt instructions to explicitly demand local job vacancies
                 prompt = f"""
-                You are an expert tech recruiter and engineering mentor specializing in the tech industry of Dhaka, Bangladesh.
+                You are an advanced AI career matching engine specializing in the tech industry of Dhaka, Bangladesh.
                 
-                Analyze the following user data:
+                Analyze the user's input:
                 - Target Role: {target_role}
                 - Target Company Type: {target_company_type}
                 - Student's Current Resume/Skills: {resume_text}
                 
-                Based on current market demands (similar to what is frequently posted on Bdjobs and LinkedIn for Dhaka tech firms like bKash, Pathao, Brain Station 23, etc.), generate a highly detailed analysis.
+                Generate a comprehensive local tech analysis. Format your response cleanly using Markdown with these exact headers:
                 
-                Format your response cleanly using Markdown with the following exact headers:
+                ### 🔍 Active Job Openings in Dhaka (Bdjobs & LinkedIn Context)
+                List 2 to 3 highly realistic, targeted job openings currently demanded by real companies in Dhaka matching this track (e.g., mention names like bKash, Pathao, Brain Station 23, TigerIT, Selise, ShopUp based on the 'Target Company Type' selected). 
+                For each opening, include:
+                - **Company Name & Role Title**
+                - **Estimated Monthly Salary Range (BDT)** - **Required Tech Stack/Skills mentioned in their typical circulars**
                 
                 ### 📊 Skill Gap Assessment
-                Identify which key languages, tools, frameworks, and architectural concepts are missing from the student's resume that are mandatory for this role in the Dhaka ecosystem.
-                
-                ### 🛠️ Local Market Realities
-                Provide a quick 2-3 sentence overview of what tech stack trends are currently driving {target_company_type} in Bangladesh right now regarding this role.
+                Compare the student's resume against these specific Dhaka job requirements. Bullet-point the exact missing frameworks, libraries, databases, or architectural concepts they need to learn to get hired.
                 
                 ### 📅 Strict 3-Month Learning Roadmap
-                Break down a hyper-focused, week-by-week or month-by-month study plan over 3 months to close this specific gap. Be highly precise with suggested action items, free resources, or project paradigms to build.
+                Provide a hyper-focused monthly/weekly breakdown designed to bridge this gap, complete with actionable project ideas relevant to the Dhaka market.
                 """
                 
                 response = client.chat.completions.create(
@@ -81,9 +82,9 @@ if st.button("🚀 Analyze Skill Gap & Generate 3-Month Roadmap"):
                     temperature=0.7
                 )
                 
-                # Output the markdown response cleanly
+                # Output the response
                 st.markdown("---")
-                st.success("🎉 Analysis Complete! Your personalized local roadmap is ready below:")
+                st.success("🎉 Local Job Matching Analysis Complete!")
                 st.markdown(response.choices[0].message.content.strip())
                 
             except Exception as e:
