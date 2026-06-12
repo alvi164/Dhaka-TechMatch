@@ -1,26 +1,74 @@
 # 🎯 Dhaka TechMatch
 
-> **AI-Powered Localized Job Skill Matcher for Bangladesh's Tech Ecosystem**
+**Dhaka TechMatch** is a professional Streamlit career-intelligence app for Bangladesh's tech ecosystem. It helps students, junior engineers, and working professionals compare their current resume against market expectations, identify missing skills, and build a practical 90-day hiring roadmap.
 
-Dhaka TechMatch is an intelligent career-matching application designed explicitly to bridge the gap between academic theory taught in universities and the rapid, stack-specific requirements of Bangladesh's modern tech ecosystem.
+## ✨ What's included
 
-## 💡 The Problem
-Many university graduates in Dhaka possess strong theoretical foundations but lack the specific framework and infrastructure experience (e.g., React.js, Spring Boot, Docker, CI/CD) actively sought by top local employers on platforms like Bdjobs and LinkedIn.
+- **Industry-ready UI** with a polished dashboard, responsive layout, sidebar workspace, and tabbed reporting.
+- **Local fit engine** that benchmarks a pasted resume against role-specific skill blueprints.
+- **Dhaka-market opportunity simulation** for fintech, logistics, software houses, startups, and remote teams.
+- **Skill-gap analytics** showing matched skills, missing skills, and a percentage market-fit score.
+- **90-day action roadmap** with monthly execution plans and portfolio project suggestions.
+- **Optional AI recruiter report** through the Hugging Face OpenAI-compatible router when `HF_TOKEN` is available.
+- **Export tools** for JSON career reports and Markdown roadmaps.
 
-## 🚀 Key Features
-- **Real-World Market Alignment**: Simulates current job market demands for the Dhaka ecosystem, targeting specific verticals like Fintech (bKash, Nagad), Ride-Sharing (Pathao), and Local Software Houses (Brain Station 23, TigerIT).
-- **Active Job Opening Generation**: Automatically generates realistic, locally relevant job openings complete with estimated salary ranges (BDT) and required tech stacks.
-- **Automated Resume Benchmarking**: Leverages the OpenAI API to perform a fast semantic audit of pasteable resume profiles against localized industry standards.
-- **Strict 3-Month Action Roadmap**: Generates a hyper-focused, week-by-week learning plan designed to make the applicant highly hireable within 90 days.
+## 🧠 Supported role blueprints
 
-## 🛠️ Architecture Stack
-- **Frontend & Routing**: Streamlit (Python Native Reactive Web App Architecture)
-- **Intelligence Gateway**: OpenAI API Engine (`gpt-4o-mini`)
-- **Environment Management**: `python-dotenv` for secure credential handling
+- Backend Engineer
+- Frontend Engineer
+- Full-Stack Engineer
+- DevOps / Cloud Engineer
+- Data / ML Engineer
+- Product / QA Engineer
 
-## 🏁 Quick Start Guide
+## 🛠️ Tech stack
 
-**1. Clone the isolated repository:**
+- **App framework:** Streamlit
+- **AI gateway:** Hugging Face router through the OpenAI Python SDK
+- **Secrets:** `python-dotenv` and Streamlit secrets
+- **Language:** Python 3.10+
+- **Theme:** Streamlit theme settings in `.streamlit/config.toml`
+
+## 🚀 Quick start
+
 ```bash
-git clone [https://github.com/alvi164/Dhaka-TechMatch.git](https://github.com/alvi164/Dhaka-TechMatch.git)
+git clone https://github.com/alvi164/Dhaka-TechMatch.git
 cd Dhaka-TechMatch
+python -m venv .venv
+source .venv/bin/activate
+pip install -r requirements.txt
+streamlit run app.py
+```
+
+## 🔐 Optional AI setup
+
+The app works without AI by using the built-in local fit engine. For recruiter-style generated reports, add a Hugging Face token:
+
+```bash
+export HF_TOKEN="your_hugging_face_token"
+streamlit run app.py
+```
+
+Or copy `.env.example` to `.env`, or create `.streamlit/secrets.toml`:
+
+```toml
+HF_TOKEN = "your_hugging_face_token"
+```
+
+## 📦 Exports
+
+After generating a report, use the **Export** tab to download:
+
+- `dhaka-techmatch-report.json`
+- `dhaka-techmatch-roadmap.md`
+
+## ✅ Production-readiness notes
+
+- Keep secrets out of Git and environment-specific config.
+- Validate live job postings before applying; market snapshots are planning simulations.
+- Add automated tests before extending the app with persistence, authentication, or live job integrations.
+- Prefer clear portfolio evidence: deployed apps, GitHub READMEs, diagrams, tests, and measurable outcomes.
+
+## 👤 Creator
+
+Designed and developed by **Syad Mehedi Hasan Alvi**.
