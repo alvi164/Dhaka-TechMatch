@@ -3,21 +3,25 @@ import os
 from openai import OpenAI
 from dotenv import load_dotenv
 
-# 1. Load Environment & Initialize OpenAI Client
+# 1. Load Environment & Initialize Hugging Face Client via OpenAI SDK
 load_dotenv()
-api_key = os.getenv("OPENAI_API_KEY")
+hf_token = os.getenv("HF_TOKEN")
 
-if not api_key:
-    st.warning("⚠️ OPENAI_API_KEY not found in .env file. Please enter it below to run the app:")
-    api_key = st.text_input("Enter OpenAI API Key:", type="password")
+if not hf_token:
+    st.warning("⚠️ HF_TOKEN not found in .env file. Please enter your Hugging Face token below to run the app:")
+    hf_token = st.text_input("Enter Hugging Face API Token (hf_...):", type="password")
 
-client = OpenAI(api_key=api_key) if api_key else None
+# Point the OpenAI client to Hugging Face's serverless router
+client = OpenAI(
+    base_url="https://router.huggingface.co/v1/",
+    api_key=hf_token
+) if hf_token else None
 
 # 2. App Configuration & Branding
 st.set_page_config(page_title="Dhaka TechMatch", page_icon="🎯", layout="wide")
 
 st.title("🎯 Dhaka TechMatch")
-st.caption("AI-Powered Localized Job Skill Matcher for Bangladesh's Tech Ecosystem")
+st.caption("AI-Powered Localized Job Skill Matcher for Bangladesh's Tech Ecosystem (Powered by Hugging Face)")
 st.markdown("---")
 
 # 3. User Input Layout
@@ -46,13 +50,13 @@ with col2:
 # 4. Processing & Execution Engine
 if st.button("🚀 Analyze Skill Gap & Fetch Matching Jobs"):
     if not client:
-        st.error("Please supply a valid OpenAI API Key first.")
+        st.error("Please supply a valid Hugging Face Token first.")
     elif not target_role or not resume_text:
         st.warning("Please provide both your target job title and your current resume text.")
     else:
-        with st.spinner("Scanning local market data (Bdjobs/LinkedIn context) and mapping job openings..."):
+        with st.spinner("Scanning local market data (Bdjobs/LinkedIn context) and mapping job openings via Llama-3..."):
             try:
-                # Upgraded prompt instructions to explicitly demand local job vacancies
+                # Localized prompt instructions
                 prompt = f"""
                 You are an advanced AI career matching engine specializing in the tech industry of Dhaka, Bangladesh.
                 
@@ -67,7 +71,8 @@ if st.button("🚀 Analyze Skill Gap & Fetch Matching Jobs"):
                 List 2 to 3 highly realistic, targeted job openings currently demanded by real companies in Dhaka matching this track (e.g., mention names like bKash, Pathao, Brain Station 23, TigerIT, Selise, ShopUp based on the 'Target Company Type' selected). 
                 For each opening, include:
                 - **Company Name & Role Title**
-                - **Estimated Monthly Salary Range (BDT)** - **Required Tech Stack/Skills mentioned in their typical circulars**
+                - **Estimated Monthly Salary Range (BDT)** 
+                - **Required Tech Stack/Skills mentioned in their typical circulars**
                 
                 ### 📊 Skill Gap Assessment
                 Compare the student's resume against these specific Dhaka job requirements. Bullet-point the exact missing frameworks, libraries, databases, or architectural concepts they need to learn to get hired.
@@ -76,8 +81,9 @@ if st.button("🚀 Analyze Skill Gap & Fetch Matching Jobs"):
                 Provide a hyper-focused monthly/weekly breakdown designed to bridge this gap, complete with actionable project ideas relevant to the Dhaka market.
                 """
                 
+                # Request routed directly to Hugging Face
                 response = client.chat.completions.create(
-                    model="gpt-4o-mini",
+                    model="meta-llama/Meta-Llama-3-8B-Instruct",
                     messages=[{"role": "user", "content": prompt}],
                     temperature=0.7
                 )
@@ -88,4 +94,4 @@ if st.button("🚀 Analyze Skill Gap & Fetch Matching Jobs"):
                 st.markdown(response.choices[0].message.content.strip())
                 
             except Exception as e:
-                st.error(f"An error occurred while connecting with OpenAI: {e}")
+                st.error(f"An error occurred while connecting with Hugging Face: {e}")
