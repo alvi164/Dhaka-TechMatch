@@ -1,3 +1,28 @@
-   .env
-   __pycache__/
-   .streamlit/
+# Environment and secrets
+.env
+.env.*
+!.env.example
+.streamlit/secrets.toml
+
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+
+# Virtual environments
+.venv/
+venv/
+env/
+
+# OS/editor files
+.DS_Store
+.vscode/
+.idea/
+
+# App exports
+*.log
+dhaka-techmatch-report.json
+dhaka-techmatch-roadmap.md
